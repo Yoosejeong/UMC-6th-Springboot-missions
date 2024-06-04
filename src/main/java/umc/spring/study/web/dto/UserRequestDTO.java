@@ -27,4 +27,10 @@ public class UserRequestDTO {
         @ExistCategories
         List<Long> preferCategory;
     }
+
+    @Getter
+    public static class UserMissionDTO{
+        @NotNull
+        Integer missionStatus;
+    }
 }

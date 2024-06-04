@@ -4,11 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import umc.spring.study.converter.StoreConverter;
+import umc.spring.study.domain.Mission;
 import umc.spring.study.domain.Review;
-import umc.spring.study.repository.ReviewRepository;
-import umc.spring.study.repository.StoreRepository;
-import umc.spring.study.repository.UserRepository;
-import umc.spring.study.validation.annotation.ExistStore;
+import umc.spring.study.domain.Store;
+import umc.spring.study.repository.*;
 import umc.spring.study.web.dto.StoreRequestDTO;
 
 @Service
@@ -21,6 +20,9 @@ public class StoreCommandServiceImpl implements StoreCommandService{
 
     private final StoreRepository storeRepository;
 
+    private final MissionRepository missionRepository;
+
+    private final RegionRepository regionRepository;
     @Override
     public Review createReview(Long userId, Long storeId, StoreRequestDTO.ReviewDTO request){
         Review review = StoreConverter.toReview(request);
@@ -30,6 +32,24 @@ public class StoreCommandServiceImpl implements StoreCommandService{
         review.setStore(storeRepository.findById(storeId).get());
 
         return reviewRepository.save(review);
+    }
+
+    @Override
+    public Mission createMission(Long storeId, StoreRequestDTO.MissionDTO request){
+        Mission mission = StoreConverter.toMission(request);
+
+        mission.setStore(storeRepository.findById(storeId).get());
+
+        return missionRepository.save(mission);
+    }
+
+    @Override
+    public Store createStore(Long regionId, StoreRequestDTO.StoreDTO request){
+        Store store = StoreConverter.toStore(request);
+
+        store.setRegion(regionRepository.findById(regionId).get());
+
+        return storeRepository.save(store);
     }
 
 }
