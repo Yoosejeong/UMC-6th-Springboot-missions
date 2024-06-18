@@ -35,4 +35,10 @@ public class Mission extends BaseEntity {
     private List<UserMission> userMissionList = new ArrayList<>();
 
 
+    public void setStore(Store store){
+        if (this.store != null)
+            store.getMissionList().remove(this);
+        this.store = store;
+        store.getMissionList().add(this);
+    }
 }

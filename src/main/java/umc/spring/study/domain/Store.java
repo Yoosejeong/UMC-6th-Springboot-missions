@@ -3,10 +3,12 @@ package umc.spring.study.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CollectionIdJdbcTypeCode;
+import org.springframework.cglib.core.Local;
 import umc.spring.study.domain.common.BaseEntity;
 import umc.spring.study.domain.mapping.UserFood;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,9 +31,9 @@ public class Store extends BaseEntity {
 
     private Float star;
 
-    private LocalDate open;
+    private LocalTime open;
 
-    private LocalDate closed;
+    private LocalTime closed;
 
     @OneToMany(mappedBy = "store" , cascade = CascadeType.ALL)
     private List<Mission> missionList = new ArrayList<>();
@@ -42,4 +44,12 @@ public class Store extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "region_id")
     private Region region;
+
+    public void setRegion(Region region) {
+        if (this.region != null)
+            region.getStoreList().remove(this);
+        this.region = region;
+        region.getStoreList().add(this);
+    }
 }
+
